@@ -1,6 +1,6 @@
-#include "fxp_rnd.h"
+#include "fxrnd.h"
 
-void fxp_rnd::fxp_rnd_func(void){
+void fxrnd::fxrnd_func(void){
     sc_fixed<4,2,SC_RND> rnd_data;
 
     rnd_data = i_data.read();

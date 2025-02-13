@@ -1,7 +1,7 @@
-#include "fxp_rnd_defines.h"
-#include "fxp_rnd_tb.h"
+#include "fxrnd_defines.h"
+#include "fxrnd_tb.h"
 
-void fxp_rnd_tb::fxp_rnd_driver(void){
+void fxrnd_tb::fxrnd_driver(void){
     sc_fixed<8,2> data_in;
 
     int range = pow(2,8);
@@ -12,7 +12,7 @@ void fxp_rnd_tb::fxp_rnd_driver(void){
     }
 }
 
-void fxp_rnd_tb::fxp_rnd_monitor(void){
+void fxrnd_tb::fxrnd_monitor(void){
     sc_fixed<4,2> data_out;
 
     wait(1, SC_NS);
