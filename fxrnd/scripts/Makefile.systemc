@@ -1,0 +1,26 @@
+# Script     : Makefile
+# Author     : Thiago M. de Oliveira <thiagomoraisee@gmail.com>
+# Description: Run SystemC model simulation.
+
+BLOCK_NAME = fxrnd
+
+SOURCE_FILES = ../arch/$(BLOCK_NAME).cpp \
+			   ../arch/$(BLOCK_NAME)_tb.cpp \
+			   ../arch/$(BLOCK_NAME)_main.cpp
+
+SYSTEMC_ARCH = linux64
+SYSTEMC_LIBS = $(SYSTEMC_HOME)/lib-$(SYSTEMC_ARCH)
+SYSTEMC_INCL = $(SYSTEMC_HOME)/include
+
+compile:
+	gcc -o $(BLOCK_NAME) $(SOURCE_FILES) -I. -I$(SYSTEMC_INCL) -L$(SYSTEMC_LIBS) -lsystemc -lstdc++ -lm
+
+run: compile
+	./$(BLOCK_NAME)
+
+waves: run
+	gtkwave $(BLOCK_NAME).vcd &
+
+clean:
+	rm ./$(BLOCK_NAME)
+	rm ./*.vcd
