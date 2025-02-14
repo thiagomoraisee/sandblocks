@@ -1,7 +1,7 @@
 // SandBlocks - Copyright 2024 Thiago M. de Oliveira. Solderpad Hardware License v2.1
 // Class      : fxrnd_driver                                         Date: 2025.02.13
 // Author     : Thiago M. de Oliveira <thiagomoraisee@gmail.com>
-// Description: Interface for fxrnd connections.
+// Description: Driver for fxrnd block testbench.
 
 class fxrnd_driver #(
     parameter unsigned WL_IN = 'd4,
@@ -25,14 +25,16 @@ endfunction
 task init();
     logger.log("INFO", "Initializing dut with default values.");
     dut_if.i_data = {WL_IN{1'b0}};
+    dut_if.mon_check = 1'b0;
 endtask
 
-
-// Task name  : init
-// Description: Auxiliary task for initializing DUT's inputs with default values.
+// Task name  : test_sanity_round
+// Description: Sanity test the fixed-point rounding by entering known value.
 task test_sanity_round();
     logger.log("INFO", "Initializing sanity round test...");
     dut_if.i_data = 4'b0011; //00.11 = 0.75 <4,2>
+    #(DELAY);
+    dut_if.mon_check = 1'b1;
     #(DELAY);
 endtask
 

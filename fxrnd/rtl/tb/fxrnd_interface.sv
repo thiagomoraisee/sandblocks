@@ -10,5 +10,6 @@ interface fxrnd_interface #(
 
 logic signed [WL_IN-1:0]  i_data;
 logic signed [WL_OUT-1:0] o_data;
+logic                     mon_check;
 
 endinterface

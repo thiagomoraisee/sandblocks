@@ -6,6 +6,7 @@
 `include "../rtl/tb/logger.sv"
 `include "../rtl/tb/fxrnd_interface.sv"
 `include "../rtl/tb/fxrnd_driver.sv"
+`include "../rtl/tb/fxrnd_monitor.sv"
 
 module fxrnd_tb();
 
@@ -22,6 +23,8 @@ localparam          IWL_OUT    = 'd2;
 localparam unsigned SIGNED     = 1'b1;
 
 // Testbench registers, wires and variables:
+logic [WL_IN-1:0]  w_data_in;
+logic [WL_OUT-1:0] w_data_out;
 
 // DUT interface instanciation:
 fxrnd_interface dut_if();
@@ -43,14 +46,33 @@ fxrnd #(
 // Logger instanciation:
 Logger logger = new();
 
-// DUT driver instanciation:
-fxrnd_driver driver = new("fxrnd_input.txt", dut_if, logger);
+// Driver and Monitor instanciation:
+fxrnd_driver  driver  = new("fxrnd_input.txt", dut_if, logger);
+fxrnd_monitor monitor = new("fxrnd_output.txt", dut_if, logger);
 
 // Initial block:
 initial begin
+    $dumpfile("waveform.vcd");
+    $dumpvars;
+end
+
+initial begin
+    w_data_in = 0;
+    w_data_out = 0;
+    #10;
+    w_data_in = 1;
+    w_data_out = 1;
+    #10;
     logger.header();
     logger.log("INFO", "Starting simulation");
     driver.init();
+    fork
+        begin
+            driver.test_sanity_round();
+        end begin
+            monitor.test_sanity_round();
+        end
+    join
     logger.footer();
     $finish();
 end
