@@ -1,1 +1,1 @@
-../scripts/Makefile.systemc
+../scripts/Makefile.modelsim

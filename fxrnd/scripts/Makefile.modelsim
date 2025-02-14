@@ -1,0 +1,29 @@
+# SandBlocks - Copyright 2024 Thiago M. de Oliveira. Solderpad Hardware License v2.1
+# Script     : fxrnd                                                Date: 2025.02.13
+# Author     : Thiago M. de Oliveira <thiagomoraisee@gmail.com>
+# Description: Run RTL with IntelFPGA's ModelSim tool.
+
+DUT_NAME  = fxrnd
+RTL_FILES = ../rtl/src/*.sv
+TB_FILES  = ../rtl/tb/$(DUT_NAME)_tb.sv
+LIB_WORK  = lib_tb
+
+run: libs compile
+	vsim +nowarn3116 -batch -do "run -all" $(LIB_WORK).$(DUT_NAME)_tb
+
+waves: libs compile
+	vsim
+
+compile:
+	vlib ../libs/$(LIB_WORK)
+	vmap $(LIB_WORK) ../libs/$(LIB_WORK) 
+	vlog -work $(LIB_WORK) $(RTL_FILES) $(TB_FILES)
+
+libs:
+	mkdir -p ../libs/$(LIB_WORK)
+
+clean:
+	@rm -rf *.ini
+	@rm -rf *.vcd
+	@rm -rf *.wlf
+	@rm -rf transcript
