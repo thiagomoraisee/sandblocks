@@ -1,0 +1,126 @@
+% SandBlocks - Copyright 2024 Thiago M. de Oliveira. Solderpad Hardware License v2.1
+% Script     : main.tex                                             Date: 2025.02.17
+% Author     : Thiago M. de Oliveira <thiagomoraisee@gmail.com>
+% Description: Main script for Sandblocks documentation LaTeX template.
+
+\documentclass[a4paper, 11pt]{article}
+\usepackage[nomarginpar, paper=a4paper]{geometry}
+\usepackage{colortbl}
+\usepackage{layout}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{inputenc}
+\usepackage{setspace}
+\usepackage[table]{xcolor}
+\usepackage{sectsty}
+\usepackage{anyfontsize}
+\usepackage{ragged2e}
+\usepackage{multicol}
+
+% Set Page Layout:
+%\setlength{\paperwidth}{210mm}
+%\setlength{\paperheight}{297mm}
+\setlength{\hoffset}{-20mm}
+\setlength{\voffset}{-20mm}
+\setlength{\oddsidemargin}{5mm}
+\setlength{\evensidemargin}{5mm}
+\setlength{\topmargin}{0mm}
+\setlength{\headheight}{11pt}
+\setlength{\headsep}{5mm}
+\setlength{\textheight}{250mm}
+\setlength{\textwidth}{190mm}
+%\setlength{\marginparsep}{0mm}
+%\setlength{\marginparwidth}{0mm}
+\setlength{\topskip}{0mm}
+%\setlength{\footskip}{10mm}
+%\setlength{\marginparpush}{0mm}
+\setlength{\columnsep}{10mm}
+
+% Set color pallete:
+\definecolor{sandnavy}{HTML}{003153}
+\definecolor{sandgreen}{HTML}{00A693}
+\definecolor{sandblue}{HTML}{546B8D}
+\definecolor{sandbrown}{HTML}{B8ABA3}
+\definecolor{sandsand}{HTML}{EDC9AF}
+\definecolor{sandred}{HTML}{893F45}
+\definecolor{sandwhite}{HTML}{F8F8FF}
+
+\chapterfont{\color{sandnavy}}
+\sectionfont{\color{sandnavy}}
+\subsectionfont{\color{sandnavy}}
+\subsubsectionfont{\color{sandnavy}}
+
+% Set Header and Footer
+\renewcommand{\headrulewidth}{0.2mm}
+\renewcommand{\headrule}{\hbox to \headwidth{
+		\color{sandblue}
+		\leaders
+		\hrule height \headrulewidth\hfill}
+}
+
+%\fancypagestyle{fancy}{
+%	\fancyhf{}
+%	\fancyhead[R]{Título: Blockguide Virtus \\ Versão: 0.1 \\ }
+%	\fancyhead[L]{\includegraphics[width=5cm]{../figures/virtus.png} \\
+%		\begin{singlespace}
+%			\setstretch{0.25}
+%			\textsc{\tiny{Universidade Federal de Campina Grande}} \\
+%			\textsc{\tiny{Centro de Engenharia Elétrica e Informática}}
+%		\end{singlespace}
+%		}
+%		\fancyfoot[C]{CONFIDENTIAL}
+%		\fancyfoot[R]{\thepage}
+%}
+
+% Set title page:
+\fancypagestyle{title}{
+	\fancyhf{}
+    \setlength{\headheight}{20mm}
+    \setlength{\headsep}{10mm}
+	\fancyhead[L]{\includegraphics[width=20mm]{../doc/figs/SandBlocks.png}}
+	\fancyhead[C]{
+            \centering
+			\setstretch{0.25}	% Espaçamento das entrelinhas
+            \textsc{\Huge{\textcolor{sandnavy}{SandBlocks}}} \\
+			\textsc{\B{Block Reference Manual}} \\
+            \vspace{4mm}
+            \begin{tabular}{l|l|l|l}
+                \tiny{\textcolor{sandblue}{Block Name}} &  \tiny{\textcolor{sandblue}{Author}} & \tiny{\textcolor{sandblue}{Date}} & \tiny{\textcolor{sandblue}{Version}} \\
+                FXRND & Thiago M. de Oliveira & 2025/02/17 & 0.1 \\
+            \end{tabular}
+		}
+    \fancyhead[R]{
+        \textsc{\Large{\textcolor{sandnavy}{Rev}}}
+        \textsc{\Large{{01}}} \\
+        \textsc{\big{\textcolor{sandnavy}{(Draft)}}}
+        \vspace{4mm}
+    }
+}
+
+\begin{document}
+%\input{../doc/src/head.tex}
+%\pagestyle{fancy} % {empty, plain, fancy, headings, myheadings}
+%\input{../doc/src/info.tex} \pagebreak
+
+\begin{multicols*}{1}
+    [{\input{../doc/src/head}}]
+    \thispagestyle{title}
+    \section{General Overview}
+    \lipsum[2]
+    \section{Interface Description}
+    \lipsum[3]
+    \section{Behavioral Description}
+    \lipsum[4]
+    \section{Microarchitecture}
+    \lipsum[5]
+    \subsection{Interface Description}
+    \lipsum[6-8]
+    \subsection{Timing Diagram}
+    \lipsum[9]
+\end{multicols*}
+
+\newline
+\layout
+
+\end{document}

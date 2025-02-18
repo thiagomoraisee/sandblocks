@@ -1,0 +1,24 @@
+# SandBlocks - Copyright 2024 Thiago M. de Oliveira. Solderpad Hardware License v2.1
+# Script     : Makefile.latex                                       Date: 2025.02.17
+# Author     : Thiago M. de Oliveira <thiagomoraisee@gmail.com>
+# Description: Run documentation development environment with pdflatex.
+
+DOC_NAME = "main"
+
+all: tex view
+
+tex:
+	@pdflatex -interaction=nonstopmode ../doc/src/$(DOC_NAME).tex &> $(DOC_NAME).log;
+
+view:
+	@evince $(DOC_NAME).pdf &
+
+debug:
+	@vim ./$(DOC_NAME).log
+
+publish:
+	@echo "Coping $(DOC_NAME).pdf para ../doc/"
+	@cp $(DOC_NAME).pdf ../doc
+
+clean:
+	@rm *.pdf *.toc *.log *.lof *.lot *.aux *.lol *.ilg *.nlo *.nls *.hst *.ver *.out

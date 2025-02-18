@@ -1,0 +1,214 @@
+%\textbf{Questão 01:} Considere o espaço vetorial formado pelas funções $\mathbb{R} \to \mathbb{C}$ e as funções:
+%\begin{equation*}
+%	\begin{array}{l}
+%		x(t) = a\cos(2 \pi t) + j b\sin(2 \pi t) \\
+%		y(t) = a\sin(2 \pi t) - j b\cos(2 \pi t)
+%	\end{array}
+%\end{equation*}
+%para $t \in [0,1]$ e 0 caso contrário. As constantes $a$ e $b$ são reais.
+%
+%\paragraph{}
+%(a) Calcule $\langle x,y \rangle$.
+%\begin{equation*}
+%	\begin{split}
+%		\langle x, y \rangle & = \int_{-\infty}^{\infty} x(t)y^{*}(t) \, dt \\
+%		& = \int_{0}^{1} \left[ a\cos(2 \pi t) + jb\sin(2 \pi t) \right]\left[ a\sin(2 \pi t) + jb\cos(2 \pi t) \right] \, dt \\
+%	\end{split}
+%\end{equation*}
+%Fazendo a mudança de variável: $\theta = 2 \pi t \Rightarrow d\theta = \frac{dt}{2 \pi}$
+%
+%\begin{equation}
+%	\begin{split}
+%		\langle x, y \rangle & = \frac{1}{2\pi} \int_{0}^{2\pi} \left( a\cos\theta + jb\sin\theta \right) \left( a\sin\theta + jb\cos\theta \right) \, d\theta \\
+%		& = \frac{1}{2\pi}\int_{0}^{2\pi} \left( a^{2}\cos\theta\sin\theta + jab\cos^{2}\theta + jab\sin^{2}\theta - b^{2}\cos\theta\sin\theta \right) \, d\theta \\
+%		& = \frac{1}{2\pi}\int_{0}^{2\pi} \left( (a^{2}-b^{2})\cos\theta\sin\theta + jab(\sin^{2}\theta + \cos^{2}\theta) \right) \, d\theta \\
+%	\end{split}
+%\end{equation}
+%
+%Assumindo $u=sin\theta$ e $du=\cos\theta d\theta$, resolvemos a integral da função $sin\theta\cos\theta$:
+%\begin{equation}
+%	\begin{split}
+%		\int_{0}^{2\pi} \sin\theta\cos\theta\, d\theta = \int u\, du = \frac{u^{2}}{2} \bigg|_{\theta=0}^{2\pi}
+%			= \frac{1}{2}\left( \sin^{2}(2\pi)-\sin^{2}(0) \right) = 0
+%	\end{split}
+%\end{equation}
+%
+%Lembrando que $sen^{2}\theta + cos^{2}\theta = 1$, inserimos o resultado de (2) em (1):
+%\begin{equation*}
+%	\begin{split}
+%		\langle x, y \rangle & = \frac{a^{2}-b^{2}}{2\pi} \int_{0}^{2\pi} \sin\theta\cos\theta \, d\theta + j\frac{ab}{2\pi}\theta \bigg|_{0}^{2\pi}\\
+%		& = \frac{a^{2}-b^{2}}{2\pi} (0) + j\frac{ab}{2\pi}(2\pi)\\
+%		& =  jab \\
+%	\end{split}
+%\end{equation*}
+%
+%
+%\paragraph{}
+%(b) Prove que $d^{2}(x,y) = \|x-y\|^{2} = \langle x-y,x-y \rangle$.
+%
+%\begin{equation}
+%	\begin{split}
+%		x-y & =a\cos(2\pi t) + j b\sin(2\pi t) - a\sin(2\pi t) + j b\cos(2\pi t) \\
+%		& = a\left[ \cos(2\pi t)-\sin(2\pi t) \right] + jb\left[ \cos(2\pi t)+\sin(2\pi t) \right]\\
+%		& = a\left( \cos\theta-\sin\theta \right) + jb\left( \cos\theta+\sin\theta \right)\\
+%	\end{split}
+%\end{equation}
+%
+%Calculando o quadrado da norma a partir da definição:
+%\begin{equation}
+%	\begin{split}
+%		\|x-y\|^{2} &= \frac{1}{2\pi}\int_{0}^{2\pi}\left| a(\cos\theta-\sin\theta)+jb(\cos\theta+\sin\theta) \right|^{2} \,dt\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[ a^{2}(\cos\theta-\sin\theta)^{2}+b^{2}(\cos\theta+\sin\theta)+j2ab(\cos\theta-\sin\theta)(\cos\theta+\sin\theta) \right]^{2} \,dt\\
+%	\end{split}
+%\end{equation}
+%
+%Simplificando os termos trigonométricos quadráticos:
+%\begin{equation}
+%	(\cos\theta-\sin\theta)^{2} = \cos^{2}\theta - 2\sin\theta\cos\theta + \sin^{2}\theta = 1-2\sin\theta\cos\theta 
+%\end{equation}
+%
+%\begin{equation}
+%	(\cos\theta+\sin\theta)^{2} = \cos^{2}\theta + 2\sin\theta\cos\theta + \sin^{2}\theta = 1+2\sin\theta\cos\theta 
+%\end{equation}
+%
+%\begin{equation}
+%	\begin{split}
+%		(\cos\theta-\sin\theta)(\cos\theta+\sin\theta) &= \cos^{2}\theta + \sin\theta\cos\theta - \sin\theta\cos\theta -\sin^{2}\theta \\
+%		&= \cos^{2}\theta-\sin^{2}\theta \\
+%		&= \cos2\theta 
+%	\end{split}
+%\end{equation}
+%
+%Substituindo as equações (5), (6) e (7) em (4):
+%\begin{equation*}
+%	\begin{split}
+%		\|x-y\|^{2} &= \frac{1}{2\pi}\int_{0}^{2\pi}\left[ a^{2}(1-2\sin\theta\cos\theta)+b^{2}(1+\sin\theta\cos\theta)+j2ab\cos2\theta \right] \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left( a^{2}-2a^{2}\sin\theta\cos\theta+b^{2}-2b^{2}\sin\theta\cos\theta+j2ab\cos2\theta \right) \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[ (a^{2}+b^{2})-2(a^{2}+b^{2})\sin\theta\cos\theta+j2ab\cos2\theta \right] \,d\theta\\
+%		&= \frac{a^{2}+b^{2}}{2\pi}\theta\bigg|_0^2\pi - \frac{2(a^{2}+b^{2})}{2\pi}\int_{0}^{2\pi}\sin\theta\cos\theta \,d\theta + \frac{j2ab}{2\pi}\int_{0}^{2\pi}\cos2\theta \,d\theta\\
+%		&= a^{2}+b^{2}+j\frac{ab}{2\pi}\sin2\theta\bigg|_{0}^{2\pi}\\
+%		&= a^{2}+b^{2}
+%	\end{split}
+%\end{equation*}
+%
+%Calculando o produto interno de $x-y$:
+%\begin{equation*}
+%	\begin{split}
+%		\langle x-y,x-y \rangle &= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a(\cos\theta-\sin\theta)+jb(\cos\theta+\sin\theta)\right]\left[a(\cos\theta-\sin\theta)-jb(\cos\theta+\sin\theta)\right] \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}[a^{2}(\cos\theta-\sin\theta)^{2}-jab(\cos\theta-\sin\theta)(\cos\theta+\sin\theta) \\
+%&+jab(\cos\theta-\sin\theta)(\cos\theta+\sin\theta)+b^{2}(\cos\theta+\sin\theta)^{2}] \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a^{2}(\cos\theta-\sin\theta)^{2}+b^{2}(\cos\theta+\sin\theta)^{2}\right] \,d\theta\\
+%	\end{split}
+%\end{equation*}
+%
+%Substituindo os resultados encontrados em (5) e (6), temos:
+%\begin{equation*}
+%	\begin{split}
+%		\langle x-y,x-y \rangle &= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a^{2}(1-2\sin\theta\cos\theta)+b^{2}(1+2\sin\theta\cos\theta)\right] \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a^{2}+b^{2}-2(a^{2}-b^{b})\sin\theta\cos\theta\right] \,d\theta\\
+%		&= \frac{a^{2}+b^{2}}{2\pi}\theta\bigg|_0^{2\pi}-\frac{2(a^{2}+b{2})}{2\pi}\int_{0}^{2\pi}\sin\theta\cos\theta \,d\theta\\
+%		&= a^{2}+b^{2}\\
+%	\end{split}
+%\end{equation*}
+%
+%Portanto, $ \|x-y\|^{2} = \langle x-y,x-y \rangle = d^{2}(x,y)  \blacksquare$
+%
+%\paragraph{}
+%(c) Calcule as normas, o produto interno, a distância e verifique as desigualdades triangular e de Cauchy-Schawrz.
+%
+%\begin{equation}
+%	\begin{split}
+%		\|x\|^{2} &= \frac{1}{2\pi}\int_{0}^{2\pi}\left|a\cos\theta+jb\sin\theta\right|^2 \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left(a^{2}\cos^{2}\theta+j2ab\cos\theta\sin\theta+b^{2}\sin^{2}\theta\right) \,d\theta\\
+%	\end{split}
+%\end{equation}
+%
+%Calculando as integrais das funções trigonométricas:
+%\begin{equation}
+%	\begin{split}
+%		\int_{0}^{2\pi}\cos^{2}\theta \,d\theta &= \int_{0}^{2\pi}\left(\frac{\cos^{2}\theta}{2} + \frac{1}{2}\right) \,d\theta\\
+%		&= \frac{\sin2\theta}{4}\bigg|_{0}^{2\pi} + \frac{\theta}{2}\bigg|_{0}^{2\pi}\\
+%		&= \pi\\
+%	\end{split}
+%\end{equation}
+%
+%\begin{equation}
+%	\begin{split}
+%		\int_{0}^{2\pi}\sin^{2}\theta \,d\theta &= \int_{0}^{2\pi}\frac{1-\cos2\theta}{2} \,d\theta\\
+%		&= \frac{\theta}{2}\bigg|_{0}^{2\pi} - \frac{\sin2\theta}{4}\bigg|_{0}^{2\pi}\\
+%		&= \pi\\
+%	\end{split}
+%\end{equation}
+% 
+%Substituindo (2), (9) e (10) em (8) ficamos com:
+%\begin{equation*}
+%	\begin{split}
+%		\|x\|^2 &=\frac{1}{2\pi}\left(a^{2}(\pi) + (0) + b^{2}(\pi)\right) = \frac{a^{2}+b^{2}}{2}
+%	\end{split}
+%\end{equation*}
+%
+%De modo similar, determinamos $\|y\|^{2}$ e $\|x-y\|^{2}$
+%\begin{equation*}
+%	\begin{split}
+%		\|y\|^2 &= \frac{1}{2\pi}\int_{0}^{2\pi}\left|a\sin\theta-jb\cos\theta\right|^2 \,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left(a^{2}\sin^{2}\theta+j2ab\sin\theta\cos\theta+b^{2}\cos^{2}\theta\right) \,d\theta\\
+%		&= \frac{a^{2}}{2\pi}\int_{0}^{2\pi}\sin^{2}\theta \,d\theta +j\frac{2ab}{2\pi}\int_{0}^{2\pi}\sin\theta\cos\theta \,d\theta+\frac{b^{2}}{2\pi}\int_{0}^{2\pi}\cos^{2}\theta \,d\theta\\
+%		&= \frac{a^{2}}{2\pi}(\pi) +(0) +\frac{b^{2}}{2\pi}(\pi)\\
+%		&= \frac{a^{2}+b^{2}}{2}\\
+%	\end{split}
+%\end{equation*}
+%
+%\begin{equation}
+%	x+y = a\cos\theta+jb\sin\theta+a\sin\theta-jb\cos\theta = a(\sin\theta+\cos\theta)+jb(\sin\theta-\cos\theta)
+%\end{equation}
+%
+%\begin{equation*}
+%	\begin{split}
+%		\|x+y\|^2 &= \langle x+y,x+y \rangle\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a(\sin\theta+\cos\theta)+jb(\sin\theta-\cos\theta)\right]\left[a(\sin\theta+\cos\theta)-jb(\sin\theta-\cos\theta) \right]\,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a^{2}(\sin\theta+\cos\theta)^{2}+b^{2}(\sin\theta-\cos\theta)^{2} \right]\,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a^{2}(\sin^2\theta+2\sin\theta\cos\theta+\cos^2\theta)+b^2(\sin^2\theta-2\sin\theta\cos\theta+\cos^2\theta)\right]\,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[(a^2+b^2)(\sin^2\theta+\cos^2\theta)+2(a^2+b^2)\sin\theta\cos\theta\right]\,d\theta\\
+%		&= \frac{1}{2\pi}\int_{0}^{2\pi}\left[a^2+b^2+2(a^2+b^2)\sin\theta\cos\theta\right]\,d\theta\\
+%		&= \frac{a^2+b^2}{2\pi}\theta\bigg|_0^{2\pi} \frac{2(a^2+b^2)}{2\pi}\int_{0}^{2\pi}\sin\theta\cos\theta\,d\theta\\
+%		&= a^2+b^2\\
+%	\end{split}
+%\end{equation*}
+%
+%Desigualdade triangular: $\|x+y\| \leq \|x\|+\|y\|$ \\
+%Desigualdade de Cauchy-Schwarz: $|\langle x,y \rangle| \leq \|x\| \cdot \|y\|$
+%
+%\paragraph{}
+%\textbf{Questão 02:} Considere o sinal $s(t)=2\cos(2\pi f_c t + \pi/4)$, $t \in (0,T)$, e 0 caso contrário.
+%Dada a base $K=2$ calcule as coordenadas ótimas, o sinal de aproximação eo erro quadrático correspondente.
+%$\phi_1 = \sqrt{\frac{2}{T}}\cos(2\pi f_c t)$,$\phi_2 = \sqrt{\frac{2}{T}}\sin(2\pi f_c t)$, $f_c >> \frac{1}{T}$.
+%Conseidere agora um um pequeno desvio na frequência do sinal, ou seja, faça, $s(t)=2\cos(2\pi (f_c+v) t + \pi/4)$, $t \in (0,T)$, e 0 caso contrário.
+%Refaça os cálculos.
+%\paragraph{}
+%\begin{equation*}
+%	\begin{split}
+%		s_1 &= \langle s,\phi_1 \rangle = \int_{0}^{T}s(t)\phi_1^*(t)\,dt\\
+%			&= \int_0^T2\cos\left(2\pi f_c t+\frac{\pi}{4}\right)\sqrt{\frac{2}{T}}\cos(2\pi f_c t) \,dt \\
+%			&= 2\sqrt{\frac{2}{T}}\int_0^T\frac{1}{2}\left( \cos((4\pi f_ct)+cos(\frac{\pi}{4}) \right)\,dt\\
+%			&= 2\sqrt{\frac{2}{T}}\frac{\sqrt{2}}{2}T = \sqrt{T} = s_2
+%	\end{split}
+%\end{equation*}
+%
+%Considerando o pequeno desvio na frequência:
+%\begin{equation*}
+%	\begin{split}
+%		s_1 &= \langle s,\phi_1 \rangle = \int_{0}^{T}s(t)\phi_1^*(t)\,dt\\
+%			&= \int_0^T2\cos\left(2\pi (f_c+v) t+\frac{\pi}{4}\right)\sqrt{\frac{2}{T}}\cos(2\pi f_c t) \,dt \\
+%			&= 2\sqrt{\frac{2}{T}}\int_0^T\frac{1}{2}\left( \cos(4\pi f_ct +\theta(t)+cos(\theta(t)) \right)\,dt\\
+%	\end{split}
+%\end{equation*}
+%Como $f_c >> 1/T$:
+%\begin{equation*}
+%	\begin{split}
+%		s_1 &= \sqrt{\frac{2}{T}}\int_0^T\cos(\theta(t))\,dt \\
+%			&= \sqrt{\frac{2}{T}}\int_0^T\cos(2\pi vt+\pi/4)\,dt \\
+%			&= \sqrt{\frac{2}{T}}\frac{\sin(2\pi vt+ \pi/4)}{2\pi v}\bigg|_0^T \\
+%			&= \sqrt{\frac{2}{T}}\cos(\pi vt+ \pi/4)\frac{\sin(\pi vT)}{\pi vt} \\
+%	\end{split}
+%\end{equation*}
+
