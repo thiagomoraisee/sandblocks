@@ -1,0 +1,70 @@
+% SandBlocks - Copyright 2024 Thiago M. de Oliveira. Solderpad Hardware License v2.1
+% Script     : functional.tex                                       Date: 2025.02.18
+% Author     : Thiago M. de Oliveira <thiagomoraisee@gmail.com>
+% Description: Functional description chapter containing a architectural approach of
+%              the block. Interface, microarchitecture, FSMs are will be presented.
+
+\section{Functional Description}
+\label{sec:functional_description}
+
+\lipsum[6]
+
+\subsection{Interface Description}
+This section presents the block's interface, detailing its input and output signals, as well as its configurable parameters set during instanciation. It will be described the block's interaction with other modules in the system, specifying signal names and direction, as well as the data parallelism. Tables \ref{tab:parameters} and \ref{tab:interface} provide a structured overview of the configuration parameters and interface signals, respectively. The behavioral aspects will be detailed in later parts of this document. 
+
+\begin{table*}[htb]
+    \centering
+	\rowcolors{2}{white}{sandblue!10}
+    \begin{tabular}{|>{\centering\arraybackslash}p{3cm}|
+                     >{\centering\arraybackslash}p{2cm}|
+                     >{\centering\arraybackslash}p{2cm}|
+                     >{\raggedright\arraybackslash}p{10cm}|}
+		\arrayrulecolor{sandnavy!50}\hline
+		\rowcolor{sandnavy!50}\hline
+        % Columns labels:
+        \textcolor{sandwhite}{\textbf{Parameter}} &
+        \textcolor{sandwhite}{\textbf{Type}}      &
+        \textcolor{sandwhite}{\textbf{Default}}   &
+        \textcolor{sandwhite}{\textbf{Description}} \\ \hline
+        % Rows contents:
+        \texttt{PARAM\_A} & \texttt{type} & \texttt{val} & Description of \texttt{PARAM\_A} parameter. \\ \hline
+		\texttt{PARAM\_B} & \texttt{type} & \texttt{val} & Description of \texttt{PARAM\_B} parameter. \\ \hline
+		\texttt{PARAM\_C} & \texttt{type} & \texttt{val} & Description of \texttt{PARAM\_C} parameter. \\ \hline
+	\end{tabular}
+    \caption{\blockname's interface parameters.}
+    \label{tab:parameters}
+\end{table*}
+
+\begin{table*}[htb]	
+    \centering
+	\rowcolors{2}{white}{sandblue!10}
+    \begin{tabular}{|>{\centering\arraybackslash}p{3cm}|
+                     >{\centering\arraybackslash}p{1cm}|
+                     >{\centering\arraybackslash}p{2cm}|
+                     >{\centering\arraybackslash}p{2cm}|
+                     >{\centering\arraybackslash}p{2cm}|
+                     >{\raggedright\arraybackslash}p{6cm}|}
+		\arrayrulecolor{sandnavy!50}\hline
+		\rowcolor{sandnavy!50}\hline
+        % Columns labels:
+        \textcolor{sandwhite}{\textbf{Port}}          &
+        \textcolor{sandwhite}{\textbf{Dir}}           &
+        \textcolor{sandwhite}{\textbf{Parallelism}}   &
+        \textcolor{sandwhite}{\textbf{Wordlength}}    &
+        \textcolor{sandwhite}{\textbf{Int. bits$^*$}} &
+        \textcolor{sandwhite}{\textbf{Description}} \\ \hline
+        % Rows contents:
+        \texttt{i\_port\_a} & in & par\_a & wl\_a & iwl\_a & Description of \texttt{i\_port\_a}. \\ \hline
+		\texttt{i\_port\_b} & in & par\_b & wl\_b & iwl\_b & Description of \texttt{i\_port\_b}. \\ \hline
+		\texttt{o\_port\_c} & inout & par\_b & wl\_c & iwl\_c & Description of \texttt{o\_port\_a}. \\ \hline
+	\end{tabular}
+    \footnotesize{$^*$Integer bits are applicable only for blocks with fixed-point arithmetic.}
+    \caption{\blockname's interface signals.}
+    \label{tab:interface}
+\end{table*}
+
+\subsection{Microarchitecture}
+\lipsum[8]
+
+\subsection{Finite State Machines}
+\lipsum[9]
