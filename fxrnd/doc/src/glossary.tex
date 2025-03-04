@@ -16,20 +16,22 @@ The table \ref{tab:glossary} shows the acronyms and abbreviations used in this d
 		\arrayrulecolor{sandnavy!50}\hline
 		\rowcolor{sandnavy!50}\hline
         % Columns labels:
-        \textcolor{sandwhite}{\textbf{Term}} &
-        \textcolor{sandwhite}{\textbf{Meaning}}                                                       \\ \hline
+        \textcolor{sandwhite}{\textbf{Term}}    &
+        \textcolor{sandwhite}{\textbf{Meaning}} \\ \hline
         % Rows contents:
-        FXRND & Fixed Point Rounder. The block's name.                                                \\ \hline
-        IWL   & Integer Wordlength. Used to specify the number of integer bits of a fixed point data. \\ \hline
-        LSB   & Least Significant Bit.                                                                \\ \hline
-        LSS   & Least Significant Sample.                                                             \\ \hline
-        MSB   & Most Significant Bit.                                                                 \\ \hline
-        MSS   & Most Significant Sample.                                                              \\ \hline
-        PPA   & Power, Performance and Area.                                                          \\ \hline
-        RND   & Round. Reffers to fixed-point quantization mode.                                      \\ \hline
-        RTL   & Register Transfer Level.                                                              \\ \hline
-        SAT   & Saturation. Reffers to fixed-point overflow mode.                                     \\ \hline
-        WL    & Wordlength. Used to specify the number of bits of a data.                             \\ \hline
+        FXRND & Fixed Point Rounder. The block's name.                                                     \\ \hline
+        IWL   & Integer Wordlength. Used to specify the number of integer bits of a fixed point data.      \\ \hline
+        LSB   & Least Significant Bit.                                                                     \\ \hline
+        LSS   & Least Significant Sample.                                                                  \\ \hline
+        MSB   & Most Significant Bit.                                                                      \\ \hline
+        MSS   & Most Significant Sample.                                                                   \\ \hline
+        N/A   & Not Applicable. Indicates that the referred info/section is not applicable to the context. \\ \hline
+        PPA   & Power, Performance and Area.                                                               \\ \hline
+        RND   & Round. Reffers to fixed-point quantization mode.                                           \\ \hline
+        RTL   & Register Transfer Level.                                                                   \\ \hline
+        SAT   & Saturation. Reffers to fixed-point overflow mode.                                          \\ \hline
+        TBD   & To Be Done. Used to indicate that the feature/section will be implemented later.           \\ \hline
+        WL    & Wordlength. Used to specify the number of bits of a data.                                  \\ \hline
 	\end{tabular}
     \caption{Acronyms and abbreviations.}
     \label{tab:glossary}
@@ -54,3 +56,16 @@ In some block representations, precision calculations and descriptions involving
 \end{equation}
 
 This notation ensures a consistent and well-defined approach to handling fixed-point arithmetic across different blocks.
+
+\subsection{Data representations}
+\label{sec:data_representations}
+
+Figure \ref{fig:data_connections} shows the color scheme for data representation, bit mapping, and data interconnections used throughout this document.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=9cm]{../../documentation/images/sandblocks_data_connections.png}
+    \caption{Data representation and connections.}
+    \label{fig:data_connections}
+\end{figure}
+

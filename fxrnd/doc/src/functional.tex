@@ -7,64 +7,85 @@
 \section{Functional Description}
 \label{sec:functional_description}
 
-\lipsum[6]
+This section provides a detailed description of the RTL implementation of the \blockname block, including its interface signals, configurable parameters, and underlying its microarchitecture. The \blockname block is designed to perform fixed-point quantization and overflow operations with high accuracy and efficiency. The main aspects of its architecture are outlined, including the internal modules, control logic, and the interaction between input and output signals. Additionally, design considerations impacting power, performance and area will be discussed, offering a thorough insight into how the block is structured to meet the functional requirements defined in the previous section.
+
+The block operation is straightforward, and its architecture is divided into two sequential steps: Overflow and Quantization. Figure \ref{fig:operation} below illustrates the bit growth along the combinational path. The red squares represent the integer bits (associated with the overflow handling), while the blue squares represent the fractional bits (related to the quantization method).
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=8cm]{../doc/figs/fxprnd_operation.png}
+    \caption{Bit growth through the combinational path.}
+    \label{fig:operation}
+\end{figure}
 
 \subsection{Interface Description}
-This section presents the block's interface, detailing its input and output signals, as well as its configurable parameters set during instanciation. It will be described the block's interaction with other modules in the system, specifying signal names and direction, as well as the data parallelism. Tables \ref{tab:parameters} and \ref{tab:interface} provide a structured overview of the configuration parameters and interface signals, respectively. The behavioral aspects will be detailed in later parts of this document. 
+The block's interface is presented in Figure \ref{fig:interface} while detaild about input and output signals, as well as its configurable parameters set during instanciation are provided in Tables \ref{tab:parameters} and \ref{tab:interface}. The behavioral aspects and the block's interaction with other modules in the system will be described later in this section, specifying signal names and direction, as well as the data parallelism.
 
-\begin{table*}[htb]
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=8cm]{../doc/figs/fxprnd_interface.png}
+    \caption{\blockname\ block interface.}
+    \label{fig:interface}
+\end{figure}
+
+\begin{table}[htb]
     \centering
 	\rowcolors{2}{white}{sandblue!10}
-    \begin{tabular}{|>{\centering\arraybackslash}p{3cm}|
-                     >{\centering\arraybackslash}p{2cm}|
-                     >{\centering\arraybackslash}p{2cm}|
-                     >{\raggedright\arraybackslash}p{10cm}|}
+    \begin{tabular}{|>{\centering\arraybackslash}p{2cm}|
+                     >{\centering\arraybackslash}p{1cm}|
+                     >{\centering\arraybackslash}p{1cm}|
+                     >{\raggedright\arraybackslash}p{3.5cm}|}
 		\arrayrulecolor{sandnavy!50}\hline
 		\rowcolor{sandnavy!50}\hline
         % Columns labels:
         \textcolor{sandwhite}{\textbf{Parameter}} &
         \textcolor{sandwhite}{\textbf{Type}}      &
-        \textcolor{sandwhite}{\textbf{Default}}   &
+        \textcolor{sandwhite}{\textbf{Def.}}      &
         \textcolor{sandwhite}{\textbf{Description}} \\ \hline
         % Rows contents:
-        \texttt{PARAM\_A} & \texttt{type} & \texttt{val} & Description of \texttt{PARAM\_A} parameter. \\ \hline
-		\texttt{PARAM\_B} & \texttt{type} & \texttt{val} & Description of \texttt{PARAM\_B} parameter. \\ \hline
-		\texttt{PARAM\_C} & \texttt{type} & \texttt{val} & Description of \texttt{PARAM\_C} parameter. \\ \hline
+        \texttt{OVFLW}    & \texttt{string} & \texttt{'WRAP'} & Overflow mode. \\ \hline
+		\texttt{QUANT}    & \texttt{string} & \texttt{'RND'}  & Quantization mode. \\ \hline
+		\texttt{SIGNED}   & \texttt{bit}    & \texttt{1}      & Flag that indicates the number uses two's complement system for signed binary numbers.. \\ \hline
+		\texttt{WL\_IN}   & \texttt{uint}   & \texttt{8}      & Input data's wordlength. \\ \hline
+		\texttt{IWL\_IN}  & \texttt{int}    & \texttt{2}      & Input data's integer bits. \\ \hline
+		\texttt{WL\_OUT}  & \texttt{uint}   & \texttt{4}      & Output data's wordlength. \\ \hline
+		\texttt{IWL\_OUT} & \texttt{int}    & \texttt{1}      & Output data's integer bits. \\ \hline
 	\end{tabular}
     \caption{\blockname's interface parameters.}
     \label{tab:parameters}
-\end{table*}
+\end{table}
 
-\begin{table*}[htb]	
+\begin{table}[htb]	
     \centering
 	\rowcolors{2}{white}{sandblue!10}
-    \begin{tabular}{|>{\centering\arraybackslash}p{3cm}|
-                     >{\centering\arraybackslash}p{1cm}|
-                     >{\centering\arraybackslash}p{2cm}|
-                     >{\centering\arraybackslash}p{2cm}|
-                     >{\centering\arraybackslash}p{2cm}|
-                     >{\raggedright\arraybackslash}p{6cm}|}
+    \begin{tabular}{|>{\centering\arraybackslash}p{1.5cm}|
+                     >{\centering\arraybackslash}p{0.5cm}|
+                     >{\centering\arraybackslash}p{0.7cm}|
+                     >{\centering\arraybackslash}p{1.5cm}|
+                     >{\raggedright\arraybackslash}p{3.0cm}|}
 		\arrayrulecolor{sandnavy!50}\hline
 		\rowcolor{sandnavy!50}\hline
         % Columns labels:
         \textcolor{sandwhite}{\textbf{Port}}          &
         \textcolor{sandwhite}{\textbf{Dir}}           &
-        \textcolor{sandwhite}{\textbf{Parallelism}}   &
-        \textcolor{sandwhite}{\textbf{Wordlength}}    &
-        \textcolor{sandwhite}{\textbf{Int. bits$^*$}} &
+        \textcolor{sandwhite}{\textbf{Par}}           &
+        \textcolor{sandwhite}{\textbf{\texttt{<WL,IWL$^*$>}}}    &
         \textcolor{sandwhite}{\textbf{Description}} \\ \hline
         % Rows contents:
-        \texttt{i\_port\_a} & in & par\_a & wl\_a & iwl\_a & Description of \texttt{i\_port\_a}. \\ \hline
-		\texttt{i\_port\_b} & in & par\_b & wl\_b & iwl\_b & Description of \texttt{i\_port\_b}. \\ \hline
-		\texttt{o\_port\_c} & inout & par\_b & wl\_c & iwl\_c & Description of \texttt{o\_port\_a}. \\ \hline
+        \texttt{i\_data}       & \texttt{I} & \texttt{1} & \texttt{\small <WL\_IN, IWL\_IN>}  & Input data with initial precision. \\ \hline
+        \texttt{o\_data}       & \texttt{O} & \texttt{1} & \texttt{\small <WL\_OUT, IWL\_OUT>}& Output quantized/overflowed data. \\ \hline
 	\end{tabular}
-    \footnotesize{$^*$Integer bits are applicable only for blocks with fixed-point arithmetic.}
+    \footnotesize{$^*$Integer wordlength are applicable only for blocks with fixed-point arithmetic.}
     \caption{\blockname's interface signals.}
     \label{tab:interface}
-\end{table*}
+\end{table}
 
 \subsection{Microarchitecture}
-\lipsum[8]
+N/A.
 
 \subsection{Finite State Machines}
-\lipsum[9]
+N/A.
+
+\subsection{Timing Diagram}
+The timing diagram for the \blockname\ block is relatively simple, as it is a purely combinational block. It illustrates the relationship between input and output signals, demonstrating the immediate propagation of data. The diagram provides some example values using the default operation mode (signed, WRAP + RND), showing the qunatization and overflow modes.
+

@@ -6,4 +6,58 @@
 
 \section{Behavioral Description}
 \label{sec:behavioral_description}
-\lipsum[3-5]
+
+The \blockname\ block supports multiple rounding and overflow modes, including \textbf{truncation}, \textbf{rounding}, \textbf{saturation}, and its variations like \textbf{round to zero} and \textbf{round to infinity}. This approach enables flexibility in adapting to various numerical precision requirements. The choice of rounding mode directly impacts the accuracy and statistical properties of the processed data, such as the block's final PPA, which is particularly relevant in applications such as digital signal processing (DSP) and machine learning accelerators.
+
+This section also describes how the block interacts with input data, processes rounding operations, and produces output values while adhering to specific quantization constraints. Key functional aspects such as overflow handling, signed and unsigned arithmetic support, and configurable precision are highlighted to give a clear understanding of its intended behavior.
+
+Diagrams, flowcharts, and example scenarios are presented to illustrate the rounding process in different configurations, ensuring a comprehensive understanding of the block operation before diving into implementation details in subsequent sections.
+
+\subsection{Overflow Methods}
+\label{sec:overflow}
+The block supports multiple overflow handling methods for fixed-point arithmetic, ensuring correct behavior when the result exceeds the representable range. These methods are summarized in Table \ref{tab:overflow}, which provides a comprehensive overview of each overflow scenario. The "Description" column of the table offers a high-level explanation of how the block manages data when overflow occurs, including whether values are saturated, wrapped around, or clipped.
+
+\begin{table}[h]
+    \centering
+    \rowcolors{2}{white}{sandblue!10}
+    \begin{tabular}{|>{\centering\arraybackslash}p{2cm}|
+                     >{\centering\arraybackslash}p{6cm}|}
+        \arrayrulecolor{sandnavy!50}\hline
+        \rowcolor{sandnavy!50}\hline
+        % Columns labels:
+        \textcolor{sandwhite}{\textbf{Overflow Mode}} &
+        \textcolor{sandwhite}{\textbf{Result}} \\ \hline
+        % Rows contents:
+        Saturation (\small{SAT}) & The result number gets the sign bit of the original number. The remaining bits shall get the inverse value of the sign bit. In unsigned saturation, the remaining bits shall be set to 1 (overflow) or 0 (underflow).\\ \hline
+        Saturation to Zero (\small{SAT\_ZERO}) & All bits shall be set to zero if an overflow occours.\\ \hline
+        Symmetrical Saturation (\small{SAT\_SYM}) & The result number shall get the sign bit of the original number. The remaining bits shall get the inverse value of the sign bit, except the least significant remaining bit, which shall be set to one. In unsigned saturation, the remaining bits shall be set to 1 (overflow) or 0 (underflow). \\ \hline
+        Wrap-around (\small{WRAP}) & All bits except for the deleted bits shall be copied to the result number. \\ \hline
+    \end{tabular}
+    \caption{Overflow modes description}
+    \label{tab:overflow}
+\end{table}
+
+The quantization methods supported for fixed-point precision limitations are listed in table 
+\subsection{Quantization Methods}
+\label{sec:quantization}
+Following the same idea of section \ref{sec:overflow}, the quantization methods for fixed-point arithmetic are listed in table \ref{tab:quantization}. These methods allows precise control of the rounding during arithmetic operation. The "Description" column provides a high-level explanation of each quantization approach. The block’s configurable nature enables the selection of different rounding strategies, such as truncation, rounding to the nearest value, or rounding to infinite. This flexibility allows the FXRND block to meet the accuracy and PPA targets for different applications, ensuring proper handling of fractional values while minimizing quantization errors.
+
+\begin{table}[h]
+    \centering
+    \rowcolors{2}{white}{sandblue!10}
+    \begin{tabular}{|>{\centering\arraybackslash}p{2cm}|
+                     >{\centering\arraybackslash}p{6cm}|}
+        \arrayrulecolor{sandnavy!50}\hline
+        \rowcolor{sandnavy!50}\hline
+        % Columns labels:
+        \textcolor{sandwhite}{\textbf{Quantization Mode}} &
+        \textcolor{sandwhite}{\textbf{Result}} \\ \hline
+        % Rows contents:
+        Rounding (\small{RND}) & Add the most significant deleted bit to the remaining bits. \\ \hline
+        Rounding to Zero (\small{RND\_ZERO}) & If the most significant deleted bit is 1, and either the sign bit or at least one other deleted bit is 1, add 1 to the remaining bits. For unsigned numbers, just copy the remaining bits. \\ \hline
+        Rounding to Infinity (\small{RND\_INF}) & If the most significant deleted bit is 1, and either the inverted value of the sign bit or at least one other deleted bit is 1, add 1 to the remaining bits. For unsigned numbers, add the most significant deleted bit to the left bits. \\ \hline
+        Truncation (\small{TRN}) & Copy the remaining bits. \\ \hline
+    \end{tabular}
+    \caption{Quantization modes description}
+    \label{tab:quantization}
+\end{table}
