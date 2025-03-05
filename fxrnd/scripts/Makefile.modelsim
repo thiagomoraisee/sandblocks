@@ -9,10 +9,10 @@ TB_FILES  = ../rtl/tb/$(DUT_NAME)_tb.sv
 LIB_WORK  = lib_tb
 
 run: libs compile
-	vsim +nowarn3116 -voptargs=+acc -batch -do "run -all" $(LIB_WORK).$(DUT_NAME)_tb
+	vsim +nowarn3116 -voptargs=+acc -batch -l modelsim.log -do "run -all" $(LIB_WORK).$(DUT_NAME)_tb 
 
 gui: libs compile
-	vsim +nowarn3116 -voptargs=+acc -gui $(LIB_WORK).$(DUT_NAME)_tb &
+	vsim +nowarn3116 -voptargs=+acc -gui -l modelsim.log $(LIB_WORK).$(DUT_NAME)_tb &
 
 waves:
 	gtkwave waveform.vcd &	
@@ -26,6 +26,7 @@ libs:
 	mkdir -p ./$(LIB_WORK)
 
 clean:
+	rm -rf *.log
 	rm -rf *.ini
 	rm -rf *.vcd
 	rm -rf *.wlf

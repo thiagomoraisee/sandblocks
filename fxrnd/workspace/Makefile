@@ -1,1 +1,1 @@
-../scripts/Makefile.latex
+../scripts/Makefile.modelsim
