@@ -47,7 +47,9 @@ make [environment] [target]
 The available environments are:
 
 - **arch** - Runs Makefile.systemc for architectural (ARCH) modeling/simulation with SystemC;
+  
 - **rtl** - Runs Makefile.modelsim for RTL modeling/simulation with ModelSim;
+  
 - **doc** - Runs Makefile.latex for compiling/visualizing the block documentation.
 
 For further details about the commands you can run `make help` in unified Makefile.
