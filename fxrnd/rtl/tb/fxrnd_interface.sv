@@ -4,8 +4,8 @@
 // Description: Interface for fxrnd connections.
 
 interface fxrnd_interface #(
-    parameter unsigned WL_IN  = 'd4,
-    parameter unsigned WL_OUT = 'd3
+    parameter unsigned WL_IN  = 'd8,
+    parameter unsigned WL_OUT = 'd4
 );
 
 logic signed [WL_IN-1:0]  i_data;

@@ -14,11 +14,11 @@ module fxrnd_tb();
 localparam unsigned DELAY = 10;
 
 // DUT parameters:
-localparam string   OVFLW_MODE = "wrap";
-localparam string   QUANT_MODE = "rnd";
-localparam unsigned WL_IN      = 'd4;
-localparam unsigned WL_OUT     = 'd3;
-localparam          IWL_IN     = 'd2;
+localparam string   OVFLW_MODE = "WRAP";
+localparam string   QUANT_MODE = "RND";
+localparam unsigned WL_IN      = 'd8;
+localparam unsigned WL_OUT     = 'd4;
+localparam          IWL_IN     = 'd4;
 localparam          IWL_OUT    = 'd2;
 localparam unsigned SIGNED     = 1'b1;
 
@@ -47,8 +47,15 @@ fxrnd #(
 Logger logger = new();
 
 // Driver and Monitor instanciation:
-fxrnd_driver  driver  = new("fxrnd_input.txt", dut_if, logger);
-fxrnd_monitor monitor = new("fxrnd_output.txt", dut_if, logger);
+fxrnd_driver #(
+    .WL_IN(WL_IN),
+    .DELAY(DELAY)
+    ) driver  = new("fxrnd_input.txt", dut_if, logger);
+
+fxrnd_monitor #(
+    .WL_IN(WL_IN),
+    .DELAY(DELAY)
+    ) monitor = new("fxrnd_output.txt", dut_if, logger);
 
 // Initial block:
 initial begin
@@ -57,12 +64,12 @@ initial begin
 end
 
 initial begin
-    w_data_in = 0;
-    w_data_out = 0;
-    #10;
-    w_data_in = 1;
-    w_data_out = 1;
-    #10;
+    //w_data_in = 0;
+    //w_data_out = 0;
+    //#10;
+    //w_data_in = 1;
+    //w_data_out = 1;
+    //#10;
     logger.header();
     logger.log("INFO", "Starting simulation");
     driver.init();

@@ -4,7 +4,7 @@
 // Description: Monitor for fxrnd block testbench.
 
 class fxrnd_monitor #(
-    parameter unsigned WL_IN = 'd4,
+    parameter unsigned WL_IN = 'd8,
     parameter unsigned DELAY = 'd10
 );
 
@@ -24,10 +24,14 @@ endfunction
 // Task name  : test_sanity_round
 // Description: Sanity test the fixed-point rounding by entering known value.
 task test_sanity_round();
+    int test_errors = this.errors;
     wait(dut_if.mon_check == 1'b1);
     logger.log("TEST", "Checking Test Sanity Round...");
-    this.errors = (dut_if.o_data != 3'b010)? this.errors++ : this.errors; 
-    logger.log("TEST", , errors==this.errors);
+    this.errors = (dut_if.o_data != 4'b1101)? this.errors++ : this.errors; 
+    logger.log("TEST", , test_errors==this.errors);
+    $display("%b", dut_if.i_data); 
+    $display("%b", dut_if.o_data); 
+    $display("%d", this.errors); 
 endtask
 
 endclass

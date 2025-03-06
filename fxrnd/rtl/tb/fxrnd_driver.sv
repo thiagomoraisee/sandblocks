@@ -4,14 +4,14 @@
 // Description: Driver for fxrnd block testbench.
 
 class fxrnd_driver #(
-    parameter unsigned WL_IN = 'd4,
+    parameter unsigned WL_IN = 'd8,
     parameter unsigned DELAY = 'd10
 );
 
 int     fd;
 string  file_name;
 virtual fxrnd_interface dut_if;
-Logger logger;
+Logger  logger;
 
 // Class constructor:
 function new(string file_name, virtual fxrnd_interface dut_if, Logger logger);
@@ -32,7 +32,7 @@ endtask
 // Description: Sanity test the fixed-point rounding by entering known value.
 task test_sanity_round();
     logger.log("INFO", "Initializing sanity round test...");
-    dut_if.i_data = 4'b0011; //00.11 = 0.75 <4,2>
+    dut_if.i_data = 8'b0011_0010; //00.11 = 0.75 <4,2>
     #(DELAY);
     dut_if.mon_check = 1'b1;
     #(DELAY);
