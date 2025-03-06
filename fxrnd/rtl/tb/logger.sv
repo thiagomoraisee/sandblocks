@@ -10,8 +10,8 @@ class Logger #(parameter unsigned HEAD_WIDE = 40);
     string   separator_thin = "";
     string   separator_bold = "";
     
-    // Verilogger constructor
-    //function new(shortint info_level=0, string file_name="None");
+    // Class constructor
+    // function new(shortint info_level=0, string file_name="None");
     function new();
         this.tags       = '{"INFO", "TEST", "WARNING", "ERROR", "FATAL"};
         for(int i=0; i<HEAD_WIDE; i++) begin
@@ -77,6 +77,13 @@ class Logger #(parameter unsigned HEAD_WIDE = 40);
         $display("Simulation stopped at time %0t ps", $time);
         //$display({HEAD_WIDE{"="}});
         $display("%s",this.separator_bold);
+    endtask
+
+    // Task to print the testbench final result 
+    task result(int errors);
+        $display("%s",this.separator_thin);
+        if(errors == 0) $display(center("P A S S"));
+        else            $display(center("F A I L"));
     endtask
 
 endclass

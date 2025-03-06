@@ -53,9 +53,9 @@ fxrnd_driver #(
     ) driver  = new("fxrnd_input.txt", dut_if, logger);
 
 fxrnd_monitor #(
-    .WL_IN(WL_IN),
-    .DELAY(DELAY)
-    ) monitor = new("fxrnd_output.txt", dut_if, logger);
+    .WL_OUT(WL_OUT),
+    .DELAY (DELAY )
+    ) monitor = new("fxrnd_reference.txt", dut_if, logger);
 
 // Initial block:
 initial begin
@@ -75,11 +75,19 @@ initial begin
     driver.init();
     fork
         begin
-            driver.test_sanity_round();
+            driver.test_sanity();
         end begin
-            monitor.test_sanity_round();
+            monitor.test_sanity();
         end
     join
+    fork
+        begin
+            driver.read_file();
+        end begin
+            monitor.read_file();
+        end
+    join
+    logger.result(monitor.errors);
     logger.footer();
     $finish();
 end
