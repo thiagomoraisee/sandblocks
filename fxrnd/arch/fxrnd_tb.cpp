@@ -46,10 +46,6 @@ void fxrnd_tb::fxrnd_monitor(void){
         strip_in = strip_in.substr(2);
         strip_in = strip_in.substr(0,WL_IN-IWL_IN) + strip_in.substr(WL_IN-IWL_IN+1);
         fi << strip_in << endl;
-
-        cout << o_data.read().to_string(SC_BIN) << endl;
-        cout << strip_in << endl;
-
         // Format data string and store it into a file
         strip_out = data_out.to_string(SC_BIN);
         strip_out = strip_out.substr(2);
