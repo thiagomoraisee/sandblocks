@@ -39,23 +39,27 @@ task read_file();
     // Compare DUT output with reference file:
     logger.log("TEST", "Checking reference file...");
     while(! $feof(this.fd)) begin
-    //for(int i=0; i<10; i++) begin
         wait(dut_if.mon_check == 1'b1);
         $fgets(line, this.fd);
         $sscanf(line, "%b", data_ref);
         if(data_ref != dut_if.o_data) this.errors++; 
+        logger.report(
+            .port_name("o_data"),
+            .dut_data ($sformatf("%b", dut_if.o_data)),
+            .ref_data ($sformatf("%b", data_ref)),
+            .isequal  (data_ref == dut_if.o_data));
         #(DELAY);
     end
     logger.log("TEST", ,test_errors==this.errors);
     $fclose(this.fd);
 endtask
 
-// Task name  : test_sanity_round
+// Task name  : test_sanity
 // Description: Sanity test the fixed-point rounding by entering known value.
 task test_sanity();
     int test_errors = this.errors;
     wait(dut_if.mon_check == 1'b1);
-    logger.log("TEST", "Checking Test Sanity Round...");
+    logger.log("TEST", "Checking Test Sanity...");
     if(dut_if.o_data != 4'b1101) this.errors++; 
     logger.log("TEST", ,test_errors==this.errors);
 endtask

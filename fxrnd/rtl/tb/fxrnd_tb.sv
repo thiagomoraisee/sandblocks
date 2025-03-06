@@ -44,7 +44,7 @@ fxrnd #(
 );
 
 // Logger instanciation:
-Logger logger = new();
+Logger logger = new("fxrnd_compare.txt");
 
 // Driver and Monitor instanciation:
 fxrnd_driver #(

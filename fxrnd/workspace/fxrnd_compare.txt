@@ -1,0 +1,7 @@
+o_data : (DUT) 0101 | (REF) 1101 : [ERROR] 
+o_data : (DUT) 1000 | (REF) 1000 : [MATCH] 
+o_data : (DUT) 1001 | (REF) 1001 : [MATCH] 
+o_data : (DUT) 0010 | (REF) 0010 : [MATCH] 
+o_data : (DUT) 1001 | (REF) 1001 : [MATCH] 
+o_data : (DUT) 1011 | (REF) 1011 : [MATCH] 
+o_data : (DUT) 1011 | (REF) 1011 : [MATCH] 

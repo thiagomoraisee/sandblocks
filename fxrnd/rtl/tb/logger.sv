@@ -4,6 +4,7 @@
 // Description: A logger to logfile handling
 
 class Logger #(parameter unsigned HEAD_WIDE = 40);
+    int      fd;
     shortint info_level;
     string   file_name;
     string   tags[];
@@ -12,14 +13,15 @@ class Logger #(parameter unsigned HEAD_WIDE = 40);
     
     // Class constructor
     // function new(shortint info_level=0, string file_name="None");
-    function new();
+    function new(string file_name);
         this.tags       = '{"INFO", "TEST", "WARNING", "ERROR", "FATAL"};
         for(int i=0; i<HEAD_WIDE; i++) begin
             this.separator_thin = {separator_thin,"-"};
             this.separator_bold = {separator_bold,"="};
         end
         //this.info_level = info_level;
-        //this.file_name  = file_name;
+        this.file_name = file_name;
+        this.fd        = $fopen(this.file_name, "w+");
     endfunction
 
     // Function to centralize text for display
@@ -61,21 +63,17 @@ class Logger #(parameter unsigned HEAD_WIDE = 40);
 
     // Task to print log header
     task header();
-        //$display({HEAD_WIDE{"="}});
         $display("%s",this.separator_bold);
         $display(center("RTL Simulation"));
         $display(center("Copyright (c) 2025 SandBlocks"));
         $system("date");
-        //$display({HEAD_WIDE{"-"}});
         $display("%s",this.separator_thin);
     endtask
 
     // Task to print log footer
     task footer();
-        //$display({HEAD_WIDE{"-"}});
         $display("%s",this.separator_thin);
         $display("Simulation stopped at time %0t ps", $time);
-        //$display({HEAD_WIDE{"="}});
         $display("%s",this.separator_bold);
     endtask
 
@@ -85,5 +83,20 @@ class Logger #(parameter unsigned HEAD_WIDE = 40);
         if(errors == 0) $display(center("P A S S"));
         else            $display(center("F A I L"));
     endtask
+
+    // Task name  : report
+    // Description: Write the DUT output x reference comparison file
+    task report(string port_name, string dut_data, string ref_data, bit isequal);
+
+        // Open file in append+ mode
+        if(isequal) $fdisplay(this.fd, "%s : (DUT) %s | (REF) %s : [MATCH] ", port_name, dut_data, ref_data);
+        else        $fdisplay(this.fd, "%s : (DUT) %s | (REF) %s : [ERROR] ", port_name, dut_data, ref_data);
+    endtask
+
+    function delete();
+        if(this.fd) begin
+            $fclose(this.fd);
+        end
+    endfunction
 
 endclass
