@@ -9,7 +9,7 @@ void fxrnd_tb::fxrnd_driver(void){
     sc_fixed<WL_IN, IWL_IN> data_in;
 
     int range = pow(2,WL_IN);
-    for(int n=0; n<10; n++){
+    for(int n=0; n<500; n++){
         data_in = ((-range/2) + (rand() % range))/pow(2,WL_IN-IWL_IN);
         o_data.write(data_in);
 
@@ -28,7 +28,7 @@ void fxrnd_tb::fxrnd_monitor(void){
     sc_fixed<WL_OUT, IWL_OUT> data_out;
 
     wait(1, SC_NS);
-    for(int n=0; n<10; n++){
+    for(int n=0; n<500; n++){
         wait(10, SC_NS);
         data_out = i_data.read();
 

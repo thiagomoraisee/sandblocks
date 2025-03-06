@@ -28,7 +28,6 @@ clean:
 	@rm -rf *.pdf
 	@rm -rf *.pdf
 
-
 ifeq ($(MAKECMDGOALS), help)
 
 else ifeq ($(MAKECMDGOALS), clean)
