@@ -50,6 +50,7 @@ SC_MODULE(fxrnd_main){
 fxrnd_main *uu_fxrnd_main = NULL;
 
 int sc_main(int argc, char* argv[]){
+
     uu_fxrnd_main = new fxrnd_main("fxrnd_main");
 
     // Start simulation

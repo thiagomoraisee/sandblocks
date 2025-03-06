@@ -55,7 +55,7 @@ fxrnd_driver #(
 fxrnd_monitor #(
     .WL_OUT(WL_OUT),
     .DELAY (DELAY )
-    ) monitor = new("fxrnd_reference.txt", dut_if, logger);
+    ) monitor = new("fxrnd_arch.txt", dut_if, logger);
 
 // Initial block:
 initial begin
