@@ -47,15 +47,13 @@ make [environment] [target]
 The available environments are:
 
 - **arch** - Runs Makefile.systemc for architectural (ARCH) modeling/simulation with SystemC;
-  
 - **rtl** - Runs Makefile.modelsim for RTL modeling/simulation with ModelSim;
-  
 - **doc** - Runs Makefile.latex for compiling/visualizing the block documentation.
 
 For further details about the commands you can run `make help` in unified Makefile.
 
 ### Examples:
-`make arch run` - Run ARCH environment;
-`make rtl waves` - Open RTL simulation waveform (.vcd) with GTKWave; 
-`make rtl gui` - Run RTL simulation with ModelSim GUI; 
-`make doc tex` - Compile (.tex) documentation with pdflatex; 
+- `make arch run` - Run ARCH environment;
+- `make rtl waves` - Open RTL simulation waveform (.vcd) with GTKWave; 
+- `make rtl gui` - Run RTL simulation with ModelSim GUI; 
+- `make doc tex` - Compile (.tex) documentation with pdflatex; 
