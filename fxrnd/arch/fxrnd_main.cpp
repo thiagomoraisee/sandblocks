@@ -14,8 +14,8 @@ SC_MODULE(fxrnd_main){
         sc_trace_file *tf = sc_create_vcd_trace_file(BLOCK_NAME); 
     #endif
 
-    sc_signal<sc_fixed<8,2>> w_data;
-    sc_signal<sc_fixed<4,2>> w_data_rnd;
+    sc_signal<sc_fixed<WL_IN, IWL_IN>>  w_data;
+    sc_signal<sc_fixed<WL_OUT,IWL_OUT>> w_data_rnd;
 
     // Constructor
     SC_CTOR(fxrnd_main) {

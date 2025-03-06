@@ -5,8 +5,8 @@
 //              quantization and overflow methods.
 
 module fxrnd #(
-    parameter string   OVFLW_MODE = "wrap",
-    parameter string   QUANT_MODE = "rnd",
+    parameter string   OVFLW_MODE = "WRAP",
+    parameter string   QUANT_MODE = "RND",
     parameter unsigned WL_IN      = 'd4,
     parameter unsigned WL_OUT     = 'd3,
     parameter          IWL_IN     = 'd2,
@@ -17,18 +17,33 @@ module fxrnd #(
     output logic signed [WL_OUT-1:0] o_data
 );
 
+// Local parameters:
 localparam unsigned FWL_IN    = WL_IN - IWL_IN;    // Input data fractional bits
 localparam unsigned FWL_OUT   = WL_OUT - IWL_OUT;  // Output data fractional bits
-localparam unsigned DEL_FBITS = FWL_IN - FWL_OUT;  // Bits to be deleted
-localparam unsigned DEL_IBITS = IWL_IN - IWL_OUT;  // Bits to be deleted
+localparam unsigned DEL_FBITS = FWL_IN - FWL_OUT;  // Fractional bits to be deleted
+localparam unsigned DEL_IBITS = IWL_IN - IWL_OUT;  // integer bits to be deleted
+
+// Internal wires and variables:
+logic signed [IWL_IN + FWL_OUT : 0] w_data;
 
 // QUANTIZATION
 generate
-if(QUANT_MODE == "rnd") begin : quant_mode_rnd
+if(QUANT_MODE == "RND") begin : quant_mode_rnd
     if(FWL_OUT >= FWL_IN) begin
-        assign o_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
+        assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
     end else begin
-        assign o_data = $signed(i_data[WL_IN-1 : DEL_FBITS]) + i_data[DEL_FBITS-1];
+        assign w_data = $signed(i_data[WL_IN-1 : DEL_FBITS]) + i_data[DEL_FBITS-1];
+    end
+end
+endgenerate
+
+// OVERFLOW
+generate
+if(OVFLW_MODE == "WRAP") begin : ovflw_mode_wrap
+    if(IWL_OUT > IWL_IN) begin
+        assign o_data = $signed({{(IWL_OUT-IWL_IN){w_data[WL_IN-1]}}, w_data});
+    end else begin
+        assign o_data = w_data[WL_OUT-1:0];
     end
 end
 endgenerate
