@@ -54,7 +54,7 @@ endtask
 // Description: Sanity test the fixed-point rounding by entering known value.
 task test_sanity();
     logger.log("INFO", "Initializing sanity round test...");
-    dut_if.i_data = 8'b0011_0010; //00.11 = 0.75 <4,2>
+    dut_if.i_data = 8'b1100_0001; //00.11 = 0.75 <4,2>
     #(DELAY) dut_if.mon_check = 1'b1;
     #(DELAY) dut_if.mon_check = 1'b0;
 endtask

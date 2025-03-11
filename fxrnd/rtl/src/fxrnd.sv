@@ -63,7 +63,7 @@ if(OVFLW_MODE == "SAT") begin : ovflw_mode_sat
                 o_data[WL_OUT-2:0] = {(WL_OUT-1){~w_data[WL_QUANT-1]}};
             end else begin
                 // If no overflow occurred, then copy the remaining bits.
-                o_data[WL_OUT-1:0] = w_data[WL_OUT-1:0];
+                o_data = w_data[WL_OUT-1:0];
             end
         end
     end
@@ -78,6 +78,30 @@ if(OVFLW_MODE == "SAT_ZERO") begin : ovflw_mode_sat_zero
         assign o_data = $signed({{(IWL_OUT-IWL_IN){w_data[WL_IN-1]}}, w_data});
     end else begin
         assign o_data = (w_ovflw_detect)? {(WL_OUT){1'b0}} : w_data[WL_QUANT-1:0];
+    end
+end
+
+if(OVFLW_MODE == "SAT_SYM") begin : ovflw_mode_sat_sym
+    // Logic for Overflow detection
+    logic w_ovflw_detect;
+    assign w_ovflw_detect = ~((&w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2])^(~|w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2]));
+
+    if(IWL_OUT > IWL_IN) begin
+        assign o_data = $signed({{(IWL_OUT-IWL_IN){w_data[WL_IN-1]}}, w_data});
+    end else begin
+        always_comb begin
+            if(w_ovflw_detect || (w_data[WL_OUT-1:0] == ('d1 << (WL_OUT-1)))) begin
+                // If an overflow occurred, then saturate.
+                if(w_data[WL_QUANT-1]) begin
+                    o_data = ('d1 << (WL_OUT-1)) | 'd1;
+                end else begin
+                    o_data = ~('d1 << (WL_OUT-1));
+                end
+            end else begin
+                // If no overflow occurred, then copy the remaining bits.
+                o_data = w_data[WL_OUT-1:0];
+            end
+        end
     end
 end
 endgenerate
