@@ -14,7 +14,7 @@ module fxrnd_tb();
 localparam unsigned DELAY = 10;
 
 // DUT parameters:
-localparam string   OVFLW_MODE = "SAT";
+localparam string   OVFLW_MODE = "SAT_ZERO";
 localparam string   QUANT_MODE = "RND";
 localparam unsigned WL_IN      = 'd8;
 localparam unsigned WL_OUT     = 'd4;

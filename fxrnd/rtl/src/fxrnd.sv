@@ -68,6 +68,18 @@ if(OVFLW_MODE == "SAT") begin : ovflw_mode_sat
         end
     end
 end
+
+if(OVFLW_MODE == "SAT_ZERO") begin : ovflw_mode_sat_zero
+    // Logic for Overflow detection
+    logic w_ovflw_detect;
+    assign w_ovflw_detect = ~((&w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2])^(~|w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2]));
+
+    if(IWL_OUT > IWL_IN) begin
+        assign o_data = $signed({{(IWL_OUT-IWL_IN){w_data[WL_IN-1]}}, w_data});
+    end else begin
+        assign o_data = (w_ovflw_detect)? {(WL_OUT){1'b0}} : w_data[WL_QUANT-1:0];
+    end
+end
 endgenerate
 
 endmodule
