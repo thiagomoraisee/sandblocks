@@ -18,13 +18,14 @@ module fxrnd #(
 );
 
 // Local parameters:
-localparam unsigned FWL_IN    = WL_IN - IWL_IN;    // Input data fractional bits
-localparam unsigned FWL_OUT   = WL_OUT - IWL_OUT;  // Output data fractional bits
-localparam unsigned DEL_FBITS = FWL_IN - FWL_OUT;  // Fractional bits to be deleted
-localparam unsigned DEL_IBITS = IWL_IN - IWL_OUT;  // integer bits to be deleted
+localparam unsigned FWL_IN    = WL_IN - IWL_IN;        // Input data fractional bits
+localparam unsigned FWL_OUT   = WL_OUT - IWL_OUT;      // Output data fractional bits
+localparam unsigned DEL_FBITS = FWL_IN - FWL_OUT;      // Fractional bits to be deleted
+localparam unsigned DEL_IBITS = IWL_IN - IWL_OUT;      // integer bits to be deleted
+localparam unsigned WL_QUANT  = IWL_IN + FWL_OUT + 1;  // integer bits to be deleted
 
 // Internal wires and variables:
-logic signed [IWL_IN + FWL_OUT : 0] w_data;
+logic signed [WL_QUANT-1:0] w_data;
 
 // QUANTIZATION
 generate
@@ -32,7 +33,7 @@ if(QUANT_MODE == "RND") begin : quant_mode_rnd
     if(FWL_OUT >= FWL_IN) begin
         assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
     end else begin
-        assign w_data = $signed(i_data[WL_IN-1 : DEL_FBITS]) + i_data[DEL_FBITS-1];
+        assign w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]}) + i_data[DEL_FBITS-1];
     end
 end
 endgenerate
@@ -44,6 +45,27 @@ if(OVFLW_MODE == "WRAP") begin : ovflw_mode_wrap
         assign o_data = $signed({{(IWL_OUT-IWL_IN){w_data[WL_IN-1]}}, w_data});
     end else begin
         assign o_data = w_data[WL_OUT-1:0];
+    end
+end
+
+if(OVFLW_MODE == "SAT") begin : ovflw_mode_sat
+    // Logic for Overflow detection
+    logic w_ovflw_detect;
+    assign w_ovflw_detect = ~((&w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2])^(~|w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2]));
+
+    if(IWL_OUT > IWL_IN) begin
+        assign o_data = $signed({{(IWL_OUT-IWL_IN){w_data[WL_IN-1]}}, w_data});
+    end else begin
+        always_comb begin
+            if(w_ovflw_detect) begin
+                // If an overflow occurred, then saturate.
+                o_data[WL_OUT-1] = w_data[WL_QUANT-1];
+                o_data[WL_OUT-2:0] = {(WL_OUT-1){~w_data[WL_QUANT-1]}};
+            end else begin
+                // If no overflow occurred, then copy the remaining bits.
+                o_data[WL_OUT-1:0] = w_data[WL_OUT-1:0];
+            end
+        end
     end
 end
 endgenerate
