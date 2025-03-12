@@ -28,6 +28,7 @@ localparam unsigned WL_QUANT  = IWL_IN + FWL_OUT + 1;  // integer bits to be del
 logic signed [WL_QUANT-1:0] w_data;
 
 // QUANTIZATION
+
 generate
 if(QUANT_MODE == "RND") begin : quant_mode_rnd
     if(FWL_OUT >= FWL_IN) begin
@@ -36,9 +37,36 @@ if(QUANT_MODE == "RND") begin : quant_mode_rnd
         assign w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]}) + i_data[DEL_FBITS-1];
     end
 end
+
+if(QUANT_MODE == "RND_ZERO") begin : quant_mode_rnd_zero
+
+    // Local wires and variables:
+    logic w_delbits_msb; // Most significant deleted bit
+    logic w_delbits_or;  // Bitwise 
+
+    assign w_delbits_msb = i_data[DEL_FBITS-1];
+    if(DEL_FBITS > 1) begin
+        assign w_delbits_or  = |i_data[DEL_FBITS-2:0];
+    end else begin
+        assign w_delbits_or  = 1'b1;
+    end
+
+    if(FWL_OUT >= FWL_IN) begin
+        assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
+    end else begin
+        always_comb begin
+            if(w_delbits_msb && (w_delbits_or || i_data[WL_IN-1])) begin
+                w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]}) + 1'b1;
+            end else begin
+                w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]});
+            end
+        end
+    end
+end
 endgenerate
 
 // OVERFLOW
+
 generate
 if(OVFLW_MODE == "WRAP") begin : ovflw_mode_wrap
     if(IWL_OUT > IWL_IN) begin

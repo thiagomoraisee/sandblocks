@@ -60,7 +60,7 @@ task test_sanity();
     int test_errors = this.errors;
     wait(dut_if.mon_check == 1'b1);
     logger.log("TEST", "Checking Test Sanity...");
-    if(dut_if.o_data != 4'b1001) this.errors++; 
+    if(dut_if.o_data != 4'b1101) this.errors++; 
     logger.log("TEST", ,test_errors==this.errors);
 endtask
 
