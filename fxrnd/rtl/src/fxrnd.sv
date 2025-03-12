@@ -31,6 +31,14 @@ logic signed [WL_QUANT-1:0] w_data;
 
 generate
 
+if(QUANT_MODE == "TRN") begin : quant_mode_trn
+    if(FWL_OUT >= FWL_IN) begin
+        assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
+    end else begin
+        assign w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]});
+    end
+end : quant_mode_trn
+
 if(QUANT_MODE == "RND") begin : quant_mode_rnd
     if(FWL_OUT >= FWL_IN) begin
         assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
