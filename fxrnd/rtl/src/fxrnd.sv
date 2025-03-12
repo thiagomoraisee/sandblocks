@@ -30,13 +30,14 @@ logic signed [WL_QUANT-1:0] w_data;
 // QUANTIZATION
 
 generate
+
 if(QUANT_MODE == "RND") begin : quant_mode_rnd
     if(FWL_OUT >= FWL_IN) begin
         assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
     end else begin
         assign w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]}) + i_data[DEL_FBITS-1];
     end
-end
+end : quant_mode_rnd
 
 if(QUANT_MODE == "RND_ZERO") begin : quant_mode_rnd_zero
 
@@ -62,7 +63,34 @@ if(QUANT_MODE == "RND_ZERO") begin : quant_mode_rnd_zero
             end
         end
     end
-end
+end : quant_mode_rnd_zero
+
+if(QUANT_MODE == "RND_INF") begin : quant_mode_rnd_inf
+
+    // Local wires and variables:
+    logic w_delbits_msb; // Most significant deleted bit
+    logic w_delbits_or;  // Bitwise 
+
+    assign w_delbits_msb = i_data[DEL_FBITS-1];
+    if(DEL_FBITS > 1) begin
+        assign w_delbits_or  = |i_data[DEL_FBITS-2:0];
+    end else begin
+        assign w_delbits_or  = 1'b1;
+    end
+
+    if(FWL_OUT >= FWL_IN) begin
+        assign w_data = $signed({i_data, {(FWL_OUT-FWL_IN){1'b0}} });
+    end else begin
+        always_comb begin
+            if(w_delbits_msb && (w_delbits_or || (!i_data[WL_IN-1]))) begin
+                w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]}) + 1'b1;
+            end else begin
+                w_data = $signed({i_data[WL_IN-1],i_data[WL_IN-1 : DEL_FBITS]});
+            end
+        end
+    end
+end : quant_mode_rnd_inf
+
 endgenerate
 
 // OVERFLOW
@@ -74,7 +102,7 @@ if(OVFLW_MODE == "WRAP") begin : ovflw_mode_wrap
     end else begin
         assign o_data = w_data[WL_OUT-1:0];
     end
-end
+end : ovflw_mode_wrap
 
 if(OVFLW_MODE == "SAT") begin : ovflw_mode_sat
     // Logic for Overflow detection
@@ -95,11 +123,13 @@ if(OVFLW_MODE == "SAT") begin : ovflw_mode_sat
             end
         end
     end
-end
+end : ovflw_mode_sat
 
 if(OVFLW_MODE == "SAT_ZERO") begin : ovflw_mode_sat_zero
-    // Logic for Overflow detection
-    logic w_ovflw_detect;
+
+    // Local wires and variables:
+    logic w_ovflw_detect; // Overflow detector
+    
     assign w_ovflw_detect = ~((&w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2])^(~|w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2]));
 
     if(IWL_OUT > IWL_IN) begin
@@ -107,11 +137,13 @@ if(OVFLW_MODE == "SAT_ZERO") begin : ovflw_mode_sat_zero
     end else begin
         assign o_data = (w_ovflw_detect)? {(WL_OUT){1'b0}} : w_data[WL_QUANT-1:0];
     end
-end
+end : ovflw_mode_sat_zero
 
 if(OVFLW_MODE == "SAT_SYM") begin : ovflw_mode_sat_sym
-    // Logic for Overflow detection
-    logic w_ovflw_detect;
+
+    // Local wires and variables:
+    logic w_ovflw_detect; // Overflow detector
+
     assign w_ovflw_detect = ~((&w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2])^(~|w_data[WL_QUANT-1:WL_QUANT-DEL_IBITS-2]));
 
     if(IWL_OUT > IWL_IN) begin
@@ -131,7 +163,8 @@ if(OVFLW_MODE == "SAT_SYM") begin : ovflw_mode_sat_sym
             end
         end
     end
-end
+end : ovflw_mode_sat_sym
+
 endgenerate
 
 endmodule
